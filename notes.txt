@@ -1,0 +1,109 @@
+######################
+Steps of Creating wasm_example
+######################
+David Pojunas-2019
+######################
+
+Credit: 
+    Tensor Programming-https://www.youtube.com/watch?v=yEiGVCF99tA&t=774s
+    wasm-bindgen-https://rustwasm.github.io/docs/wasm-bindgen/examples/import-js.html
+
+1. SET UP CMD'S
+    a. cargo +nightly install wasm-bindgen-cli
+    b. rustup target add wasm32-unknown-unknown
+2. EDIT Cargo.toml
+    a. dependencies: wasm-bindgen = "0.2.51"
+    b. add [lib]
+        b1. crate-type = ["cdylib"]
+    c. cargo build
+3. EDIT lib.rs
+4. BUILD WASM
+    a. cargo +nightly build --target wasm32-unknown-unknown
+5. OPTIMIZE
+    a. wasm-bindgen target/wasm32-unknown-unknown/debug/wasm_example.wasm --out-dir .
+         <--target web>
+    b. wasm-bindgen --target no-modules target/wasm32-unknown-unknown/debug/wasm_example.wasm --out-dir . 
+6. CREATE NODE.JS COMPONENTS (see current step)
+7. RUN YARN
+    a. yarn install
+    b. yarn serve
+
+##FIXED##Current Issue:
+    When visiting localhost:8080, we get the error in the browser console:
+
+        1. Loading module from “http://localhost:8080/wasm_example” was blocked because of a disallowed MIME type (“text/html”).
+            a. see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options?utm_source=mozilla&utm_medium=firefox-console-errors&utm_campaign=default
+        2. Loading failed for the module with source “http://localhost:8080/wasm_example”.
+        3. TypeError: error loading dynamically imported module
+
+
+
+
+
+Useful Information:
+
+    1. RDF JS WIKI-
+        https://www.w3.org/community/rdfjs/wiki/Comparison_of_RDFJS_libraries
+
+    2. RDF PRIMER-
+        https://www.w3.org/TR/rdf-primer/
+
+    3. SOPHIA CRATE-
+        https://docs.rs/sophia/0.3.0/sophia/
+    
+    4. RDF/JS DATA MODEL
+        https://rdf.js.org/data-model-spec/#term-interface
+    
+    
+Fix:
+    httppls
+    
+
+WHAT TO TEST:
+
+    Parsing 
+    Loading from a fastgraph
+    Indexing from the hashset
+
+Need:
+
+    1. Get my wasm to run in browser
+    2. Understand the fastgraph functions
+    3. Test extertal rust code for parsing and loading from a fastgraph
+    4. Try running in WASM from JavaScript
+    
+
+JS Objects
+
+DataSet Trait only immutible traits (sophiaFastDataset)
+
+Quad ([RcTerm;3]), Option<RcTerm>
+and 
+Term RcTerm
+are immutible traits
+
+Mutable DataSet: extends Dataset 
+
+
+load-dataset(src, format = "nt") -> sophiaFastDataset
+
+ SophiaDataSet
+    quad-count() -> int
+    quads() -> iterator or Array of Sophia Quads
+    quads_matching(s,p,o,g) any args can be null or SophiaTerm
+
+Sophia Term (Struct) enums -> struct terms
+    term type 
+        str? iri, bnode, variable
+    value
+        String version or literal, str
+    datatype 
+        value of iri, null or str
+    language
+        null or str
+
+Sophia Quad returning a sophia term 
+    s()
+    p()
+    o()
+    g()

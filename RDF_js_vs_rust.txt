@@ -1,0 +1,63 @@
+######################
+RDF comparing js to rust
+######################
+David Pojunas-2019
+######################
+
+JavaScript:
+
+interface DataFactory {
+  NamedNode namedNode(string value);
+  BlankNode blankNode(optional string value);
+  Literal literal(string value, optional (string or NamedNode) languageOrDatatype);
+  Variable variable(string value);
+  DefaultGraph defaultGraph();
+
+  ######################
+  Quad quad(Term subject, Term predicate, Term object, optional Term? graph);
+  ######################
+
+  Term fromTerm(Term original);
+  Quad fromQuad(Quad original);
+};
+
+
+interface Quad {
+  attribute Term subject;
+  attribute Term predicate;
+  attribute Term object;
+  attribute Term graph;
+  boolean equals(optional Quad? other);
+};
+
+
+Rust:
+
+pub trait Dataset<'a> {
+    ######################
+    type Quad: Quad<'a>;
+    ######################
+    ...
+}
+
+##############
+pub trait TermData: AsRef<str> + Clone + Eq + Hash { }
+##############
+
+pub trait Quad<'a> {
+
+    ###############
+    type TermData: TermData + 'a;
+    ###############
+
+    fn s(&self) -> &Term<Self::TermData>;
+    fn p(&self) -> &Term<Self::TermData>;
+    fn o(&self) -> &Term<Self::TermData>;
+    fn g(&self) -> Option<&Term<Self::TermData>>;
+
+    fn as_triple(self) -> QuadAsTriple<Self>
+    where
+        Self: Sized,
+    { ... }
+}
+

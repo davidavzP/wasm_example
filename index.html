@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+    <title>Rust Wasm Example</title>
+</head>
+
+<body>
+
+    <script src="wasm_example.js"></script>
+
+    <script>
+        async function run(){
+            await wasm_bindgen('wasm_example_bg.wasm');
+
+            console.log(wasm_bindgen.run_alert);
+            console.log(wasm_bindgen.load_graph);
+            wasm_bindgen.run_alert("JavaScript");
+            var graph = '<http://www.franz.com/simple#person1> <http://www.franz.com/simple#first-name> "Joseph" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#middle-initial> "Patrick" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#last-name> "Kennedy" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#suffix> "none" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#alma-mater> <http://www.franz.com/simple#Harvard> . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#birth-year> "1888" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#death-year> "1969" . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#sex> <http://www.franz.com/simple#male> . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#spouse> <http://www.franz.com/simple#person2> . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#has-child> <http://www.franz.com/simple#person3> . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#profession> <http://www.franz.com/simple#banker> . \
+    <http://www.franz.com/simple#person1> <http://www.franz.com/simple#birth-place> <http://www.franz.com/simple#place5> . \
+    <http://www.franz.com/simple#person1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.franz.com/simple#person> .'
+            wasm_bindgen.load_graph(graph);
+
+
+            const f = wasm_bindgen.Foo;
+            const foo = new wasm_bindgen.Foo(32);
+            foo.display();
+           
+            
+
+            
+            // let g = wasm_bindgen.make_graph();
+            // let resp = await fetch(my_url);
+            // g.load(resp.content);
+        }
+
+        run();
+        //do not put anything after run()!!!!!!!!
+    </script>
+
+    <!-- <script>
+        let g;
+        wasm_bindgen('wasm_example_bg.wasm').then(()=>{
+            console.log(wasm_bindgen.run_alert);
+            wasm_bindgen.run_alert("JavaScript");
+            g = wasm_bindgen.make_graph();
+            return fetch(my_url);
+        }).then((reesp) => {
+            g.load(resp.content)
+        })
+        //do not put anything after run()!!!!!!!!
+
+    </script> -->
+
+    <!--<script src="./src/index.js"></script>-->
+</body>
+
+</html>

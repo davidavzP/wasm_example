@@ -1,0 +1,99 @@
+######################
+wasm_bindgen reference
+######################
+David Pojunas-2019
+######################
+
+/////////
+Importable Types from Rust -> Javascript
+
+All Types can be imported from Javascript to Rust
+using--<extern Whatever;> 
+
+T: Parameter - Yes
+&T: Parameter - Yes
+&mut T: Parameter - No
+T: return value - Yes
+Option<T>: Parameter - Yes
+Option<T>: return value - Yes
+
+JavaScript representation
+    Instances of the extant 
+    <Whatever> JavaScript class/prototype constructor
+
+examples: https://rustwasm.github.io/docs/wasm-bindgen/reference/types/imported-js-types.html#imported-extern-whatever-javascript-types
+//////////
+
+//////////
+Exportable <struct Whatever> Rust Types 
+
+T: Parameter - Yes
+&T: Parameter - Yes
+&mut T: Parameter - Yes
+T: return value - Yes
+Option<T>: Parameter - No
+Option<T>: return value - No
+
+JavaScript representation
+    Instances of a <wasm-bindgen> generated JavaScript 
+    <class Whatever {...}>
+
+examples: https://rustwasm.github.io/docs/wasm-bindgen/reference/types/exported-rust-types.html
+///////////
+
+///////////
+WASM_BINDGEN Exports
+
+Constructor Example:
+
+Rust:
+#[wasm_bindgen]
+pub struct Foo {
+    contents: u32,
+}
+
+#[wasm_bindgen]
+impl Foo {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Foo {
+        Foo { contents: 0 }
+    }
+
+    pub fn get_contents(&self) -> u32 {
+        self.contents
+    }
+}
+
+Javascript:
+import { Foo } from './my_module';
+
+const f = new Foo();
+console.log(f.get_contents());
+
+
+ReadOnly:
+
+When attached to a pub struct field 
+this indicates that it's read-only from JavaScript, 
+and a setter will not be generated and exported to JavaScript.
+
+example:
+
+#[wasm_bindgen(readonly)]
+pub second: u32,
+
+Setters and Getters:
+
+The getter and setter attributes can be used in Rust 
+impl blocks to define properties in JS 
+that act like getters and setters of a field. 
+
+example:
+#[wasm_bindgen(setter)]
+#[wasm_bindgen(getter)]
+
+///////////
+
+
+
+
