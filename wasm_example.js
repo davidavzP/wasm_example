@@ -70,7 +70,17 @@
         wasm.load_graph(passStringToWasm(graph), WASM_VECTOR_LEN);
     };
 
+    let cachegetInt32Memory = null;
+    function getInt32Memory() {
+        if (cachegetInt32Memory === null || cachegetInt32Memory.buffer !== wasm.memory.buffer) {
+            cachegetInt32Memory = new Int32Array(wasm.memory.buffer);
+        }
+        return cachegetInt32Memory;
+    }
+
     let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+
+    cachedTextDecoder.decode();
 
     function getStringFromWasm(ptr, len) {
         return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
@@ -122,6 +132,85 @@ class Foo {
     }
 }
 __exports.Foo = Foo;
+/**
+*/
+class JSDataset {
+
+    static __wrap(ptr) {
+        const obj = Object.create(JSDataset.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        wasm.__wbg_jsdataset_free(ptr);
+    }
+    /**
+    * @returns {JSDataset}
+    */
+    constructor() {
+        const ret = wasm.jsdataset_new();
+        return JSDataset.__wrap(ret);
+    }
+    /**
+    * @param {string} nquads
+    * @returns {number}
+    */
+    load(nquads) {
+        const ret = wasm.jsdataset_load(this.ptr, passStringToWasm(nquads), WASM_VECTOR_LEN);
+        return ret >>> 0;
+    }
+    /**
+    * @returns {JSTerm}
+    */
+    first_subject() {
+        const ret = wasm.jsdataset_first_subject(this.ptr);
+        return JSTerm.__wrap(ret);
+    }
+}
+__exports.JSDataset = JSDataset;
+/**
+*/
+class JSTerm {
+
+    static __wrap(ptr) {
+        const obj = Object.create(JSTerm.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        wasm.__wbg_jsterm_free(ptr);
+    }
+    /**
+    * @param {string} term
+    * @returns {JSTerm}
+    */
+    constructor(term) {
+        const ret = wasm.jsterm_new(passStringToWasm(term), WASM_VECTOR_LEN);
+        return JSTerm.__wrap(ret);
+    }
+    /**
+    * @returns {string}
+    */
+    n3() {
+        const retptr = 8;
+        const ret = wasm.jsterm_n3(retptr, this.ptr);
+        const memi32 = getInt32Memory();
+        const v0 = getStringFromWasm(memi32[retptr / 4 + 0], memi32[retptr / 4 + 1]).slice();
+        wasm.__wbindgen_free(memi32[retptr / 4 + 0], memi32[retptr / 4 + 1] * 1);
+        return v0;
+    }
+}
+__exports.JSTerm = JSTerm;
 
 function init(module) {
 
