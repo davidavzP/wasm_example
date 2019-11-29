@@ -28,6 +28,38 @@ export class Foo {
 */
   display(): void;
 }
+/**
+*/
+export class JSDataset {
+  free(): void;
+/**
+* @returns {JSDataset} 
+*/
+  constructor();
+/**
+* @param {string} nquads 
+* @returns {number} 
+*/
+  load(nquads: string): number;
+/**
+* @returns {JSTerm} 
+*/
+  first_subject(): JSTerm;
+}
+/**
+*/
+export class JSTerm {
+  free(): void;
+/**
+* @param {string} term 
+* @returns {JSTerm} 
+*/
+  constructor(term: string);
+/**
+* @returns {string} 
+*/
+  n3(): string;
+}
 
 /**
 * If `module_or_path` is {RequestInfo}, makes a request and

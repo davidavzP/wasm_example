@@ -3,11 +3,13 @@ extern crate wasm_bindgen;
 
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
+use sophia::dataset::Dataset;
+use sophia::dataset::inmem::FastDataset;
 use sophia::graph::inmem::FastGraph;
-use sophia::parser::nt;
+use sophia::parser::{nt, nq};
 use sophia::triple::stream::*;
 use sophia::term::*;
-use self::Term::*;
+use sophia::quad::{*, stream::*};
 
 #[wasm_bindgen]
 extern "C" {
@@ -89,9 +91,39 @@ impl JSTerm{
     #[wasm_bindgen(constructor)]
     pub fn new(term: String) -> JSTerm {
         let term: &str = term.as_str();
-        let term = Rc::new(*term);
+        let term = Rc::from(term);
         let term = Term::new_iri(term).unwrap();
         return JSTerm { t: term}
         
     }
+
+    pub fn n3(&self) -> String {
+        self.t.n3()
+    }
 }
+
+#[wasm_bindgen]
+pub struct JSDataset (FastDataset);
+
+#[wasm_bindgen]
+impl JSDataset{
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> JSDataset {
+        JSDataset(FastDataset::new())
+    }
+
+    pub fn load(&mut self, nquads: &str) -> usize {
+        nq::parse_str(nquads).in_dataset(&mut self.0).unwrap()
+    }
+
+    pub fn first_subject(& self) -> JSTerm {
+        self.0
+            .subjects()
+            .unwrap()
+            .into_iter()
+            .map(|term| JSTerm{ t: term.clone() })
+            .next()
+            .unwrap()
+    }
+}
+

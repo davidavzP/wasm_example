@@ -45,6 +45,13 @@
             // let g = wasm_bindgen.make_graph();
             // let resp = await fetch(my_url);
             // g.load(resp.content);
+
+            console.log("-------- JSDataset --------");
+            let d = new wasm_bindgen.JSDataset();
+            let loaded = d.load(graph);
+            console.log(loaded, "quads loaded");
+            console.log(d.first_subject().n3());
+
         }
 
         run();
