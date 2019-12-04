@@ -107,3 +107,13 @@ Sophia Quad returning a sophia term
     p()
     o()
     g()
+
+
+Returning Iterator to JS
+
+    Issue thread: https://github.com/rustwasm/wasm-bindgen/issues/1478 (includes one solution)
+    Second Solution: https://github.com/rustwasm/wasm-bindgen/issues/111
+
+    possible to create Iterator: https://rustwasm.github.io/wasm-bindgen/api/js_sys/struct.Iterator.html
+    
+
