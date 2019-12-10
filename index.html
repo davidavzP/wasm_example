@@ -12,13 +12,15 @@
 
     <script src="wasm_example.js"></script>
 
+
+
     <script>
         async function run(){
             await wasm_bindgen('wasm_example_bg.wasm');
 
             console.log(wasm_bindgen.run_alert);
             console.log(wasm_bindgen.load_graph);
-            wasm_bindgen.run_alert("JavaScript");
+            //wasm_bindgen.run_alert("JavaScript");
             var graph = '<http://www.franz.com/simple#person1> <http://www.franz.com/simple#first-name> "Joseph" . \
     <http://www.franz.com/simple#person1> <http://www.franz.com/simple#middle-initial> "Patrick" . \
     <http://www.franz.com/simple#person1> <http://www.franz.com/simple#last-name> "Kennedy" . \
@@ -32,12 +34,17 @@
     <http://www.franz.com/simple#person1> <http://www.franz.com/simple#profession> <http://www.franz.com/simple#banker> . \
     <http://www.franz.com/simple#person1> <http://www.franz.com/simple#birth-place> <http://www.franz.com/simple#place5> . \
     <http://www.franz.com/simple#person1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.franz.com/simple#person> .'
-            wasm_bindgen.load_graph(graph);
 
 
-            const f = wasm_bindgen.Foo;
-            const foo = new wasm_bindgen.Foo(32);
-            foo.display();
+            let d = new wasm_bindgen.JSDataset();
+            d.load(graph);
+            console.log("quads: " + d.quads());
+            console.log(d.first_subject().n3());
+
+            //wasm_bindgen.load_graph(graph);
+            //const f = wasm_bindgen.Foo;
+            //const foo = new wasm_bindgen.Foo(32);
+            //foo.display();
            
             
 

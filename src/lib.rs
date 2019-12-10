@@ -82,6 +82,7 @@ pub fn load_graph(graph: &str){
 
 //Term String
 #[wasm_bindgen]
+#[derive(Clone)]
 pub struct JSTerm (Term<Rc<str>>);
 
 
@@ -98,6 +99,25 @@ impl JSTerm{
     pub fn n3(&self) -> String {
         self.0.n3()
     }
+}
+
+impl From <&'_ RcTerm> for JSTerm{
+    fn from(other: &RcTerm) -> JSTerm{
+        JSTerm(other.clone())
+    } 
+}
+
+#[wasm_bindgen]
+pub struct JSQuad ([JSTerm; 3], Option<JSTerm>);
+
+#[wasm_bindgen]
+impl JSQuad{
+
+    #[wasm_bindgen(getter)]
+    pub fn s(&self) -> JSTerm{
+        self.0[0].clone()
+    }
+
 }
 
 #[wasm_bindgen]
@@ -126,12 +146,11 @@ impl JSDataset{
             .unwrap()
     }
 
-    pub fn quads(&self) -> Array{
-       let quads: Vec<JSTerm> = self.0.quads().into_iter().map(|term| {
-           JSTerm(term.unwrap().1.unwrap().clone())
-       }).collect();
-       quads.into_iter().map(JsValue::from).collect()
-
+    pub fn quads(&self) -> Array {
+       self.0.quads().into_iter().map(|quad| {
+            let quad = quad.unwrap();
+            JSQuad([quad.s().into(), quad.p().into(), quad.o().into()], quad.g().map(JSTerm::from))
+       }).map(JsValue::from).collect()
     }
 }
 
