@@ -23,7 +23,9 @@ Credit:
     a. wasm-bindgen target/wasm32-unknown-unknown/debug/wasm_example.wasm --out-dir .
          <--target web>
     b. wasm-bindgen --target no-modules target/wasm32-unknown-unknown/debug/wasm_example.wasm --out-dir . 
-6. CREATE NODE.JS COMPONENTS (see current step)
+6. CREATE NODE.JS COMPONENTS 
+    a. add package.json file
+    b. add index.html
 7. RUN YARN
     a. yarn install
     b. yarn serve
@@ -117,3 +119,7 @@ Returning Iterator to JS
     possible to create Iterator: https://rustwasm.github.io/wasm-bindgen/api/js_sys/struct.Iterator.html
     
 
+Following the JS API Implementation:
+
+    used the graphy link from: https://rdf.js.org/
+    quads: https://graphy.link/core.data.factory#function_quad

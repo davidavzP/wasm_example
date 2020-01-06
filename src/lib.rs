@@ -34,6 +34,7 @@ extern "C" {
     fn log_many(a: &str, b: &str);
 }
 
+//Example of a Struct
 #[wasm_bindgen]
 pub struct Foo {
     internal: i32,
@@ -58,27 +59,30 @@ impl Foo {
         log("Foo interal ->");
         log_i32(self.internal);
     }
-
 }
 
+//JavaScript Functions in Rust
 #[wasm_bindgen]
 pub fn run_alert(item: &str){
     alert(&format!("This is WASM and {}", item));
 }
 
+//First Attempt at Loading Sophia FastGraph
 #[wasm_bindgen]
 pub fn load_graph(graph: &str){
     let NT_DOC: &str = graph;
-
     let mut g = FastGraph::new();
-    //expose FastGraph, Term, Quads
     let inserted = nt::parse_str(NT_DOC).in_graph(&mut g);
     let num_inserted: u32 = inserted.unwrap() as u32;
     log("N-Triples Inserted ->");
     log_u32(num_inserted);
 }
 
-
+///////////////////////////////
+/// A sample JSTerm to be used in the RDF/JS interface
+/// David Pojunas
+/// Pierre-Antoine Champin
+///////////////////////////////
 
 //Term String
 #[wasm_bindgen]
